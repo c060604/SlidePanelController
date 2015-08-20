@@ -16,6 +16,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+//        var centerViewController = ViewController()
+//        var leftViewController = LeftViewController()
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        
+        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+        var centerViewController = storyboard.instantiateViewControllerWithIdentifier("centerViewController") as! ViewController
+        var leftViewController = storyboard.instantiateViewControllerWithIdentifier("leftViewController") as! LeftViewController
+        var rightViewController = storyboard.instantiateViewControllerWithIdentifier("rightViewController") as! RightViewController
+        
+        SlidePanleOptions.panelDisplayMode = .PanelAboveCenter
+        var slideController = SlideViewController(centerViewController: centerViewController, leftPanelViewController: leftViewController, rightPanelViewController: rightViewController)
+        
+        window!.rootViewController = slideController
+        window!.makeKeyAndVisible()
+        
+//        for fontfamilyname in UIFont.familyNames() {
+//            println("############################")
+//            println("\(fontfamilyname)")
+//            for fontname in UIFont.fontNamesForFamilyName(fontfamilyname as! String) {
+//                println("\(fontname)")
+//            }
+//        }
+        
         return true
     }
 

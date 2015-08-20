@@ -13,6 +13,12 @@
 		09433BDB1B7B4BD800D5E4F5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09433BDA1B7B4BD800D5E4F5 /* Images.xcassets */; };
 		09433BDE1B7B4BD800D5E4F5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09433BDC1B7B4BD800D5E4F5 /* LaunchScreen.xib */; };
 		09433BEA1B7B4BD800D5E4F5 /* SlidePanelControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BE91B7B4BD800D5E4F5 /* SlidePanelControllerTests.swift */; };
+		09433BF41B7B4C0900D5E4F5 /* SlideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BF31B7B4C0900D5E4F5 /* SlideViewController.swift */; };
+		09433BF61B7C389900D5E4F5 /* LeftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BF51B7C389900D5E4F5 /* LeftViewController.swift */; };
+		09433BF81B7C90DA00D5E4F5 /* RightViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BF71B7C90DA00D5E4F5 /* RightViewController.swift */; };
+		09433BFA1B7C944A00D5E4F5 /* SlideViewController+PanelBehindCenterMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BF91B7C944A00D5E4F5 /* SlideViewController+PanelBehindCenterMode.swift */; };
+		09433BFC1B7C94AA00D5E4F5 /* SlideViewController+PanelBesideCenterMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BFB1B7C94AA00D5E4F5 /* SlideViewController+PanelBesideCenterMode.swift */; };
+		09433BFE1B7C94F800D5E4F5 /* SlideViewController+PanelAboveCenterMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09433BFD1B7C94F800D5E4F5 /* SlideViewController+PanelAboveCenterMode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +42,12 @@
 		09433BE31B7B4BD800D5E4F5 /* SlidePanelControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SlidePanelControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		09433BE81B7B4BD800D5E4F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		09433BE91B7B4BD800D5E4F5 /* SlidePanelControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlidePanelControllerTests.swift; sourceTree = "<group>"; };
+		09433BF31B7B4C0900D5E4F5 /* SlideViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideViewController.swift; sourceTree = "<group>"; };
+		09433BF51B7C389900D5E4F5 /* LeftViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftViewController.swift; sourceTree = "<group>"; };
+		09433BF71B7C90DA00D5E4F5 /* RightViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RightViewController.swift; sourceTree = "<group>"; };
+		09433BF91B7C944A00D5E4F5 /* SlideViewController+PanelBehindCenterMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SlideViewController+PanelBehindCenterMode.swift"; sourceTree = "<group>"; };
+		09433BFB1B7C94AA00D5E4F5 /* SlideViewController+PanelBesideCenterMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SlideViewController+PanelBesideCenterMode.swift"; sourceTree = "<group>"; };
+		09433BFD1B7C94F800D5E4F5 /* SlideViewController+PanelAboveCenterMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SlideViewController+PanelAboveCenterMode.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +95,12 @@
 				09433BDA1B7B4BD800D5E4F5 /* Images.xcassets */,
 				09433BDC1B7B4BD800D5E4F5 /* LaunchScreen.xib */,
 				09433BD11B7B4BD800D5E4F5 /* Supporting Files */,
+				09433BF31B7B4C0900D5E4F5 /* SlideViewController.swift */,
+				09433BFD1B7C94F800D5E4F5 /* SlideViewController+PanelAboveCenterMode.swift */,
+				09433BFB1B7C94AA00D5E4F5 /* SlideViewController+PanelBesideCenterMode.swift */,
+				09433BF91B7C944A00D5E4F5 /* SlideViewController+PanelBehindCenterMode.swift */,
+				09433BF51B7C389900D5E4F5 /* LeftViewController.swift */,
+				09433BF71B7C90DA00D5E4F5 /* RightViewController.swift */,
 			);
 			path = SlidePanelController;
 			sourceTree = "<group>";
@@ -213,7 +231,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				09433BD61B7B4BD800D5E4F5 /* ViewController.swift in Sources */,
+				09433BF61B7C389900D5E4F5 /* LeftViewController.swift in Sources */,
+				09433BF81B7C90DA00D5E4F5 /* RightViewController.swift in Sources */,
+				09433BFA1B7C944A00D5E4F5 /* SlideViewController+PanelBehindCenterMode.swift in Sources */,
 				09433BD41B7B4BD800D5E4F5 /* AppDelegate.swift in Sources */,
+				09433BF41B7B4C0900D5E4F5 /* SlideViewController.swift in Sources */,
+				09433BFC1B7C94AA00D5E4F5 /* SlideViewController+PanelBesideCenterMode.swift in Sources */,
+				09433BFE1B7C94F800D5E4F5 /* SlideViewController+PanelAboveCenterMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

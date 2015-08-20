@@ -20,6 +20,12 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func toggleLeft(sender: UIButton) {
+        sliderController()?.toggleLeftPanel()
+    }
 
+    @IBAction func toggleRight(sender: UIButton) {
+        sliderController()?.toggleRightPanel()
+    }
 }
 
