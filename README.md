@@ -1,0 +1,2 @@
+# SlidePanelController
+A slider controller.
