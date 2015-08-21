@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var leftViewController = storyboard.instantiateViewControllerWithIdentifier("leftViewController") as! LeftViewController
         var rightViewController = storyboard.instantiateViewControllerWithIdentifier("rightViewController") as! RightViewController
         
-        SlidePanleOptions.panelDisplayMode = .PanelAboveCenter
+        SlidePanelOptions.panelDisplayMode = .PanelAboveCenter
         var slideController = SlideViewController(centerViewController: centerViewController, leftPanelViewController: leftViewController, rightPanelViewController: rightViewController)
         
         window!.rootViewController = slideController

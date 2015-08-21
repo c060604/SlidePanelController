@@ -15,7 +15,7 @@ extension SlideViewController {
     func initViewWithPanelBesideCenterMode() {
         if let viewController = leftPanelViewController {
             let originFrame = viewController.view.frame
-            let newFrame = CGRect(origin: CGPoint(x: -SlidePanleOptions.leftViewWidth, y: 0), size: CGSize(width: SlidePanleOptions.leftViewWidth, height: originFrame.size.height))
+            let newFrame = CGRect(origin: CGPoint(x: -SlidePanelOptions.leftViewWidth, y: 0), size: CGSize(width: SlidePanelOptions.leftViewWidth, height: originFrame.size.height))
             viewController.view.frame = newFrame
             view.insertSubview(viewController.view, atIndex: 0)
             addChildViewController(viewController)
@@ -24,7 +24,7 @@ extension SlideViewController {
         
         if let viewController = rightPanelViewController {
             let originFrame = viewController.view.frame
-            let newFrame = CGRect(origin: CGPoint(x: CGRectGetWidth(view.bounds), y: 0), size: CGSize(width: SlidePanleOptions.rightViewWidth, height: originFrame.size.height))
+            let newFrame = CGRect(origin: CGPoint(x: CGRectGetWidth(view.bounds), y: 0), size: CGSize(width: SlidePanelOptions.rightViewWidth, height: originFrame.size.height))
             viewController.view.frame = newFrame
             view.insertSubview(viewController.view, atIndex: 0)
             addChildViewController(viewController)
@@ -34,22 +34,22 @@ extension SlideViewController {
         
     func animateToggleLeftPanelWithPanelBesideCenterMode(#shouldExpanded: Bool) {
         if shouldExpanded {
-            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut,
+            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.95, initialSpringVelocity: 0, options: .CurveEaseInOut,
                 animations: {
-                    self.centerViewController.view.frame.origin.x = SlidePanleOptions.leftViewWidth
-                    self.opacityView.frame.origin.x = SlidePanleOptions.leftViewWidth
-                    self.opacityView.layer.opacity = Float(SlidePanleOptions.contentViewOpacity)
+                    self.centerViewController.view.frame.origin.x = SlidePanelOptions.leftViewWidth
+                    self.opacityView.frame.origin.x = SlidePanelOptions.leftViewWidth
+                    self.opacityView.layer.opacity = Float(SlidePanelOptions.contentViewOpacity)
                     self.leftPanelViewController?.view.frame.origin.x = 0
                 }, completion: { _ in
                     self.currentState = .LeftPanelExpanded
             })
         } else {
-            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut,
+            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.95, initialSpringVelocity: 0, options: .CurveEaseInOut,
                 animations: {
                     self.centerViewController.view.frame.origin.x = 0
                     self.opacityView.frame.origin.x = 0
                     self.opacityView.layer.opacity = 0
-                    self.leftPanelViewController?.view.frame.origin.x = -SlidePanleOptions.leftViewWidth
+                    self.leftPanelViewController?.view.frame.origin.x = -SlidePanelOptions.leftViewWidth
                 }, completion: { _ in
                     self.currentState = .BothCollapsed
             })
@@ -58,17 +58,17 @@ extension SlideViewController {
     
     func animateToggleRightPanelWithPanelBesideCenterMode(#shouldExpanded: Bool) {
         if shouldExpanded {
-            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut,
+            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.95, initialSpringVelocity: 0, options: .CurveEaseInOut,
                 animations: {
-                    self.centerViewController.view.frame.origin.x = -SlidePanleOptions.rightViewWidth
-                    self.opacityView.frame.origin.x = -SlidePanleOptions.rightViewWidth
-                    self.opacityView.layer.opacity = Float(SlidePanleOptions.contentViewOpacity)
-                    self.rightPanelViewController?.view.frame.origin.x = CGRectGetWidth(self.view.bounds) - SlidePanleOptions.rightViewWidth
+                    self.centerViewController.view.frame.origin.x = -SlidePanelOptions.rightViewWidth
+                    self.opacityView.frame.origin.x = -SlidePanelOptions.rightViewWidth
+                    self.opacityView.layer.opacity = Float(SlidePanelOptions.contentViewOpacity)
+                    self.rightPanelViewController?.view.frame.origin.x = CGRectGetWidth(self.view.bounds) - SlidePanelOptions.rightViewWidth
                 }, completion: { _ in
                     self.currentState = .RightPanelExpanded
             })
         } else {
-            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .CurveEaseInOut,
+            UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.95, initialSpringVelocity: 0, options: .CurveEaseInOut,
                 animations: {
                     self.centerViewController.view.frame.origin.x = 0
                     self.opacityView.frame.origin.x = 0
@@ -85,42 +85,75 @@ extension SlideViewController {
         case .Began:
             gestureDraggingFromLeftToRight = recognizer.velocityInView(view).x > 0
         case .Changed:
+            var centerOriginX = centerViewController.view.frame.origin.x + recognizer.translationInView(view).x
             var radio: CGFloat = 0
-            if leftPanelViewController != nil && (gestureDraggingFromLeftToRight && currentState == .BothCollapsed
-                || !gestureDraggingFromLeftToRight && currentState == .LeftPanelExpanded) {
-                    
-                leftPanelViewController!.view.center.x = leftPanelViewController!.view.center.x + recognizer.translationInView(view).x
-                radio = CGRectGetMinX(centerViewController.view.frame) / SlidePanleOptions.leftViewWidth
+            if isTogglingLeftPanel() {
                 
-            } else if rightPanelViewController != nil && (!gestureDraggingFromLeftToRight && currentState == .BothCollapsed
-                || gestureDraggingFromLeftToRight && currentState == .RightPanelExpanded) {
+                var leftViewOriginX = leftPanelViewController!.view.frame.origin.x + recognizer.translationInView(view).x
+                (centerOriginX, leftViewOriginX) = applyLeftTranslationWithPanelBesideCenterMode(centerOriginX, leftViewOriginX: leftViewOriginX)
+                leftPanelViewController!.view.frame.origin.x = leftViewOriginX
+                radio = CGRectGetMinX(centerViewController.view.frame) / SlidePanelOptions.leftViewWidth
                 
-                rightPanelViewController!.view.center.x = rightPanelViewController!.view.center.x + recognizer.translationInView(view).x
-                radio = (CGRectGetMaxX(view.bounds) - CGRectGetMaxX(centerViewController.view.frame)) / SlidePanleOptions.rightViewWidth
+                
+            } else if isTogglingRightPanel() {
+                
+                var rightViewOriginX = rightPanelViewController!.view.frame.origin.x + recognizer.translationInView(view).x
+                (centerOriginX, rightViewOriginX) = applyRightTranslationWithPanelBesideCenterMode(centerOriginX, rightViewOriginX: rightViewOriginX)
+                rightPanelViewController!.view.frame.origin.x = rightViewOriginX
+                radio = (CGRectGetMaxX(view.bounds) - CGRectGetMaxX(centerViewController.view.frame)) / SlidePanelOptions.rightViewWidth
                     
             }
-            let centerX = recognizer.view!.center.x + recognizer.translationInView(view).x
-            recognizer.view!.center.x = centerX
-            opacityView.center.x = centerX
-            opacityView.layer.opacity = Float(SlidePanleOptions.contentViewOpacity * radio)
+            centerViewController.view.frame.origin.x = centerOriginX
+            opacityView.frame.origin.x = centerOriginX
+            opacityView.layer.opacity = Float(SlidePanelOptions.contentViewOpacity * radio)
             
             recognizer.setTranslation(CGPointZero, inView: view)
         case .Ended:
-            if leftPanelViewController != nil && gestureDraggingFromLeftToRight && currentState == .BothCollapsed {
+            if isTogglingLeftPanel() {
                 let hasMoveGreaterThanHalfWay = CGRectGetMinX(recognizer.view!.frame) > leftViewCenterX
-                animateToggleLeftPanel(shouldExpanded: hasMoveGreaterThanHalfWay)
-            } else if leftPanelViewController != nil && !gestureDraggingFromLeftToRight && currentState == .LeftPanelExpanded {
-                let hasMoveGreaterThanHalfWay = CGRectGetMinX(recognizer.view!.frame) > leftViewCenterX
-                animateToggleLeftPanel(shouldExpanded: hasMoveGreaterThanHalfWay)
-            } else if rightPanelViewController != nil && !gestureDraggingFromLeftToRight && currentState == .BothCollapsed {
-                let hasMoveGreaterThanHalfWay = CGRectGetMaxX(recognizer.view!.frame) < rightViewCenterX
-                animateToggleRightPanel(shouldExpanded: hasMoveGreaterThanHalfWay)
-            } else {
+                animateToggleLeftPanelWithPanelBesideCenterMode(shouldExpanded: hasMoveGreaterThanHalfWay)
+            } else if isTogglingRightPanel() {
                 let hasMoveGreaterThanHalfway = CGRectGetMaxX(recognizer.view!.frame) < rightViewCenterX
-                animateToggleRightPanel(shouldExpanded: hasMoveGreaterThanHalfway)
+                animateToggleRightPanelWithPanelBesideCenterMode(shouldExpanded: hasMoveGreaterThanHalfway)
             }
         default:
             break
         }
+    }
+    
+    func applyLeftTranslationWithPanelBesideCenterMode(centerViewOriginX: CGFloat, leftViewOriginX: CGFloat) -> (CGFloat, CGFloat) {
+        var newCenterViewOriginX = centerViewOriginX
+        var newLeftViewOriginX = leftViewOriginX
+        if newCenterViewOriginX < 0 {
+            newCenterViewOriginX = 0
+        } else if newCenterViewOriginX > SlidePanelOptions.leftViewWidth {
+            newCenterViewOriginX = SlidePanelOptions.leftViewWidth
+        }
+        
+        if newLeftViewOriginX < -SlidePanelOptions.leftViewWidth {
+            newLeftViewOriginX = -SlidePanelOptions.leftViewWidth
+        } else if newLeftViewOriginX > 0 {
+            newLeftViewOriginX = 0
+        }
+        
+        return (newCenterViewOriginX, newLeftViewOriginX)
+    }
+    
+    func applyRightTranslationWithPanelBesideCenterMode(centerViewOriginX: CGFloat, rightViewOriginX: CGFloat) -> (CGFloat, CGFloat) {
+        var newCenterViewOriginX = centerViewOriginX
+        var newRightViewOriginX = rightViewOriginX
+        if newCenterViewOriginX < -SlidePanelOptions.rightViewWidth {
+            newCenterViewOriginX = -SlidePanelOptions.rightViewWidth
+        } else if newCenterViewOriginX > 0 {
+            newCenterViewOriginX = 0
+        }
+        
+        if newRightViewOriginX < CGRectGetWidth(view.bounds) - SlidePanelOptions.rightViewWidth {
+            newRightViewOriginX = CGRectGetWidth(view.bounds) - SlidePanelOptions.rightViewWidth
+        } else if newRightViewOriginX > CGRectGetWidth(view.bounds) {
+            newRightViewOriginX = CGRectGetWidth(view.bounds)
+        }
+        
+        return (newCenterViewOriginX, newRightViewOriginX)
     }
 }

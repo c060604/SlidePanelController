@@ -8,6 +8,13 @@
 
 import UIKit
 
+/**
+panel 呈现方式
+
+- PanelBehindCenter: panel 被 center 遮挡在下面
+- PanelBesideCenter: panel 挨着 center
+- PanelAboveCenter:  panel 在 center 上面
+*/
 public enum DisplayMode {
     case PanelBehindCenter
     case PanelBesideCenter
@@ -15,6 +22,13 @@ public enum DisplayMode {
 }
 
 
+/**
+panel 的状态
+
+- BothCollapsed:      两个 panel 都收起
+- LeftPanelExpanded:  left panel 打开
+- RightPanelExpanded: right panel 打开
+*/
 enum SlideOutState {
     case BothCollapsed
     case LeftPanelExpanded
@@ -22,11 +36,14 @@ enum SlideOutState {
 }
 
 
-public struct SlidePanleOptions {
-    static var leftViewWidth: CGFloat = 270.0
-    static var rightViewWidth: CGFloat = 270.0
+/**
+*  slide controller 的控制参数
+*/
+public struct SlidePanelOptions {
+    static var leftViewWidth: CGFloat = 270.0                       // left panel width
+    static var rightViewWidth: CGFloat = 270.0                      // right panel width
     static var panelDisplayMode: DisplayMode = .PanelBehindCenter
-    static var contentViewOpacity: CGFloat = 0.5
+    static var contentViewOpacity: CGFloat = 0.5                    // center view 的透明度
 }
 
 
@@ -88,7 +105,7 @@ public class SlideViewController: UIViewController {
         opacityView.userInteractionEnabled = false
         view.addSubview(opacityView)
         
-        switch SlidePanleOptions.panelDisplayMode {
+        switch SlidePanelOptions.panelDisplayMode {
         case .PanelBehindCenter:
             initViewWithPanelBehindCenterMode()
             break
@@ -102,8 +119,8 @@ public class SlideViewController: UIViewController {
             break
         }
         
-        leftViewCenterX = SlidePanleOptions.leftViewWidth / 2
-        rightViewCenterX = CGRectGetWidth(view.bounds) - SlidePanleOptions.rightViewWidth / 2
+        leftViewCenterX = SlidePanelOptions.leftViewWidth / 2
+        rightViewCenterX = CGRectGetWidth(view.bounds) - SlidePanelOptions.rightViewWidth / 2
         
         // 添加手势
         let panGestureRecoginzer = UIPanGestureRecognizer(target: self, action: Selector("handlePanGesture:"))
@@ -124,12 +141,17 @@ public class SlideViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    /**
+    关闭 panel
+    */
     func collapseSidePanels() {
         switch currentState {
         case .LeftPanelExpanded:
+            println("collapseSidePanel: leftPanelExpanded")
             toggleLeftPanel()
             break
         case .RightPanelExpanded:
+            println("collapseSidePanel: rightPanelExpanded")
             toggleRightPanel()
             break
         default:
@@ -137,16 +159,19 @@ public class SlideViewController: UIViewController {
         }
     }
     
+    /**
+    操作 left panel
+    */
     override func toggleLeftPanel() {
         if currentState == .RightPanelExpanded {
-            return
+            return collapseSidePanels()
         }
         
         let shouldExpanded = (currentState != .LeftPanelExpanded)
         if leftPanelViewController == nil {
             return
         }
-        switch SlidePanleOptions.panelDisplayMode {
+        switch SlidePanelOptions.panelDisplayMode {
         case .PanelBehindCenter:
             animateToggleLeftPanelWithPanelBehindCenterMode(shouldExpanded: shouldExpanded)
             break
@@ -161,16 +186,19 @@ public class SlideViewController: UIViewController {
         }
     }
     
+    /**
+    操作 right panel
+    */
     override func toggleRightPanel() {
         if currentState == .LeftPanelExpanded {
-            return
+            return collapseSidePanels()
         }
         
         let shouldExpanded = (currentState != .RightPanelExpanded)
         if rightPanelViewController == nil {
             return
         }
-        switch SlidePanleOptions.panelDisplayMode {
+        switch SlidePanelOptions.panelDisplayMode {
         case .PanelBehindCenter:
             animateToggleRightPanelWithPanelBehindCenterMode(shouldExpanded: shouldExpanded)
             break
@@ -178,42 +206,36 @@ public class SlideViewController: UIViewController {
             animateToggleRightPanelWithPanelBesideCenterMode(shouldExpanded: shouldExpanded)
             break
         case .PanelAboveCenter:
-            animateToggleRightPanelWithPanelAboveCenterMode(shouldExpaned: shouldExpanded)
+            animateToggleRightPanelWithPanelAboveCenterMode(shouldExpanded: shouldExpanded)
         default:
             break
         }
     }
     
-    func animateToggleLeftPanel(#shouldExpanded: Bool) {
-        switch SlidePanleOptions.panelDisplayMode {
-        case .PanelBehindCenter:
-            animateToggleLeftPanelWithPanelBehindCenterMode(shouldExpanded: shouldExpanded)
-            break
-        case .PanelBesideCenter:
-            animateToggleLeftPanelWithPanelBesideCenterMode(shouldExpanded: shouldExpanded)
-            break
-        case .PanelAboveCenter:
-            animateToggleLeftPanelWithPanelAboveCenterMode(shouldExpanded: shouldExpanded)
-            break
-        default:
-            break
+    /**
+    判断是否在操作 left panel
+    
+    :returns: Bool
+    */
+    func isTogglingLeftPanel() -> Bool {
+        if leftPanelViewController != nil && (gestureDraggingFromLeftToRight && currentState == .BothCollapsed
+            || currentState == .LeftPanelExpanded) {
+                return true
         }
+        return false
     }
     
-    func animateToggleRightPanel(#shouldExpanded: Bool) {
-        switch SlidePanleOptions.panelDisplayMode {
-        case .PanelBehindCenter:
-            animateToggleRightPanelWithPanelBehindCenterMode(shouldExpanded: shouldExpanded)
-            break
-        case .PanelBesideCenter:
-            animateToggleRightPanelWithPanelBesideCenterMode(shouldExpanded: shouldExpanded)
-            break
-        case .PanelAboveCenter:
-            animateToggleRightPanelWithPanelAboveCenterMode(shouldExpaned: shouldExpanded)
-            break
-        default:
-            break
+    /**
+    判断是否在操作 right panel
+    
+    :returns: Bool
+    */
+    func isTogglingRightPanel() -> Bool {
+        if rightPanelViewController != nil && (!gestureDraggingFromLeftToRight && currentState == .BothCollapsed
+            || currentState == .RightPanelExpanded) {
+                return true
         }
+        return false
     }
     
     /*
@@ -231,7 +253,7 @@ public class SlideViewController: UIViewController {
 
 extension SlideViewController: UIGestureRecognizerDelegate {
     func handlePanGesture(recognizer: UIPanGestureRecognizer) {
-        switch SlidePanleOptions.panelDisplayMode {
+        switch SlidePanelOptions.panelDisplayMode {
         case .PanelBehindCenter:
             handlePanGestureWithPanelBehindCenterMode(recognizer)
             break
